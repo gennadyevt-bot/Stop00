@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import android.view.View
 
 class MainActivity : AppCompatActivity() {
 
@@ -507,8 +508,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         dialogView.findViewById<View>(R.id.btnAbout).setOnClickListener {
-            Toast.makeText(this, "STOP VPN v4.0.0
-AmneziaWG + Kotlin", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "STOP VPN v4.0.0 | AmneziaWG + Kotlin", Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
 
