@@ -37,9 +37,10 @@ class VpnManager(private val context: Context) {
     init {
         scope.launch(Dispatchers.IO) {
             try {
+                Log.i(TAG, "Initializing AmneziaWG backend...")
                 backend = GoBackend(context, NoopTunnelActionHandler())
                 futureBackend.complete(backend!!)
-                Log.i(TAG, "AmneziaWG backend initialized")
+                Log.i(TAG, "AmneziaWG backend initialized successfully")
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to initialize backend: ${e.message}", e)
                 futureBackend.completeExceptionally(e)
@@ -119,7 +120,6 @@ class VpnManager(private val context: Context) {
                 tunnel?.let { t ->
                     futureBackend.await().setState(t, Tunnel.State.DOWN, currentConfig)
                 }
-                stopVpnService()
                 updateStatus(VpnStatus.DISCONNECTED)
                 currentServer = null
                 onServerChanged?.invoke(null)
@@ -168,88 +168,6 @@ class VpnManager(private val context: Context) {
     }
 
     private fun testTunnelConnectivity() {
-        scope.launch(Dispatchers.IO) {
-            try {
-                val addresses = InetAddress.getAllByName("1.1.1.1")
-                Log.i(TAG, "Tunnel connectivity test: resolved ${addresses.size} addresses")
-            } catch (e: Exception) {
-                Log.w(TAG, "Tunnel connectivity test failed: ${e.message}")
-            }
-        }
-    }
-
-    private fun validateKeys(server: ServerInfo): Boolean {
-        if (server.interfacePrivateKey.length != 44) {
-            showToast("Невалидный приватный ключ (должен быть 44 символа base64)")
-            return false
-        }
-        if (server.peerPublicKey.length != 44) {
-            showToast("Невалидный публичный ключ сервера (должен быть 44 символа base64)")
-            return false
-        }
-        if (!server.peerEndpoint.contains(":")) {
-            showToast("Невалидный endpoint (должен быть IP:port или host:port)")
-            return false
-        }
-        return true
-    }
-
-    private fun buildConfig(server: ServerInfo): Config {
-        val presharedKeyLine = if (server.peerPresharedKey.isNotEmpty()) {
-            "PresharedKey = ${server.peerPresharedKey}\n"
-        } else {
-            ""
-        }
-
-        val awgParams = buildString {
-            if (server.jc.isNotEmpty() && server.jc != "0") append("Jc = ${server.jc}\n")
-            if (server.jmin.isNotEmpty() && server.jmin != "0") append("Jmin = ${server.jmin}\n")
-            if (server.jmax.isNotEmpty() && server.jmax != "0") append("Jmax = ${server.jmax}\n")
-            if (server.s1.isNotEmpty() && server.s1 != "0") append("S1 = ${server.s1}\n")
-            if (server.s2.isNotEmpty() && server.s2 != "0") append("S2 = ${server.s2}\n")
-            if (server.h1.isNotEmpty() && server.h1 != "0") append("H1 = ${server.h1}\n")
-            if (server.h2.isNotEmpty() && server.h2 != "0") append("H2 = ${server.h2}\n")
-            if (server.h3.isNotEmpty() && server.h3 != "0") append("H3 = ${server.h3}\n")
-            if (server.h4.isNotEmpty() && server.h4 != "0") append("H4 = ${server.h4}\n")
-        }
-
-        val allowedIPs = if (server.peerAllowedIPs.contains("::/0")) {
-            Log.w(TAG, "IPv6 (::/0) detected, using IPv4 only")
-            "0.0.0.0/0"
-        } else {
-            server.peerAllowedIPs
-        }
-
-        val awgConfig = """
-            [Interface]
-            Address = ${server.interfaceAddress}
-            DNS = ${server.interfaceDns}
-            PrivateKey = ${server.interfacePrivateKey}
-            ${awgParams}[Peer]
-            PublicKey = ${server.peerPublicKey}
-            $presharedKeyLine
-            AllowedIPs = $allowedIPs
-            Endpoint = ${server.peerEndpoint}
-            PersistentKeepalive = ${server.peerPersistentKeepalive}
-        """.trimIndent()
-
-        Log.d(TAG, "AWG Config generated (keys hidden)")
-        return Config.parse(ByteArrayInputStream(awgConfig.toByteArray()))
-    }
-
-    private fun updateStatus(status: VpnStatus) {
-        globalStatus = status
-        scope.launch(Dispatchers.Main) {
-            onStatusChanged?.invoke(status)
-        }
-    }
-
-    private fun showToast(message: String) {
-        scope.launch(Dispatchers.Main) {
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-        }
-    }
-}    private fun testTunnelConnectivity() {
         scope.launch(Dispatchers.IO) {
             try {
                 val addresses = InetAddress.getAllByName("1.1.1.1")
