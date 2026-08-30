@@ -15,3 +15,4 @@ AmneziaWG VPN для Android (ранее WireGuard).
 1. Установить `amneziawg-tools` (awg-quick) вместо wg-quick
 2. Добавить в конфиг те же параметры Jc/Jmin/Jmax/S1/S2/H1-H4
 3. Ключи оставить теми же — меняется только движок + обфускация
+
