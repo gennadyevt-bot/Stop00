@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.VpnService
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
@@ -49,12 +48,12 @@ class VpnManager(private val context: Context) {
     }
 
     fun prepareVpn(activity: Activity): Boolean {
-        val intent = VpnService.prepare(activity)
+        val intent = android.net.VpnService.prepare(activity)
         return intent == null
     }
 
     fun getPrepareIntent(activity: Activity): android.content.Intent? {
-        return VpnService.prepare(activity)
+        return android.net.VpnService.prepare(activity)
     }
 
     fun connect(server: ServerInfo) {
