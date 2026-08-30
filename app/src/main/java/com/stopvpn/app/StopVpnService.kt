@@ -1,12 +1,11 @@
 package com.stopvpn.app
 
-import android.app.Service
+import org.amnezia.awg.backend.AbstractBackend
 import android.content.Intent
-import android.net.VpnService
 import android.os.IBinder
 import android.util.Log
 
-class StopVpnService : VpnService() {
+class StopVpnService : AbstractBackend.VpnService() {
 
     companion object {
         private const val TAG = "StopVpnService"
@@ -23,13 +22,12 @@ class StopVpnService : VpnService() {
         val serverName = intent?.getStringExtra("server_name") ?: "STOP VPN"
         val notification = NotificationHelper.buildNotification(this, serverName)
         startForeground(NotificationHelper.NOTIFICATION_ID, notification)
-        return Service.START_STICKY
+        return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         Log.i(TAG, "onDestroy")
-        stopForeground(STOP_FOREGROUND_REMOVE)
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
