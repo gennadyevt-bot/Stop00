@@ -1,6 +1,6 @@
 package com.stopvpn.app
 
-import com.zaneschepke.amneziawg.android.Tunnel
+import org.amnezia.awg.backend.Tunnel
 
 class WgTunnel(
     private val tunnelName: String,
