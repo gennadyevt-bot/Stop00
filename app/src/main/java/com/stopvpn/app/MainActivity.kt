@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var vpnManager: VpnManager
     private lateinit var serverAdapter: ServerAdapter
     private lateinit var serverStorage: ServerStorage
-    private lateinit var btnPower: MaterialButton
     private lateinit var tvStatus: TextView
     private lateinit var ivLogo: ImageView
     private lateinit var rvServers: RecyclerView
@@ -58,7 +57,6 @@ class MainActivity : AppCompatActivity() {
         vpnManager = VpnManager(this)
         serverStorage = ServerStorage(this)
 
-        btnPower = findViewById(R.id.btnPower)
         tvStatus = findViewById(R.id.tvStatus)
         ivLogo = findViewById(R.id.ivLogo)
         rvServers = findViewById(R.id.rvServers)
@@ -71,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         setupVpnCallbacks()
         updateUiState(VpnStatus.DISCONNECTED)
 
-        btnPower.setOnClickListener {
+        ivLogo.setOnClickListener {
             when (vpnManager.getStatus()) {
                 VpnStatus.CONNECTED, VpnStatus.CONNECTING -> vpnManager.disconnect()
                 else -> {
@@ -397,27 +395,22 @@ class MainActivity : AppCompatActivity() {
     private fun updateUiState(status: VpnStatus) {
         when (status) {
             VpnStatus.CONNECTED -> {
-                btnPower.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_green_dark)
                 tvStatus.text = "VPN активен"
                 tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark))
             }
             VpnStatus.CONNECTING -> {
-                btnPower.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_orange_dark)
                 tvStatus.text = "Подключение..."
                 tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark))
             }
             VpnStatus.SWITCHING -> {
-                btnPower.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_orange_dark)
                 tvStatus.text = "Смена сервера..."
                 tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark))
             }
             VpnStatus.DISCONNECTING -> {
-                btnPower.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_orange_dark)
                 tvStatus.text = "Отключение..."
                 tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark))
             }
             else -> {
-                btnPower.backgroundTintList = ContextCompat.getColorStateList(this, android.R.color.holo_red_dark)
                 tvStatus.text = "VPN отключен"
                 tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray))
             }
