@@ -403,6 +403,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUiState(status: VpnStatus) {
+        StopVpnWidget.updateWidget(this, status)
         when (status) {
             VpnStatus.CONNECTED -> {
                 ivLogo.setImageResource(R.drawable.ic_logo_big_green)
