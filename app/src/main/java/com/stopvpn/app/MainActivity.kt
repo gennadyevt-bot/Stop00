@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         ivMenu.setOnClickListener {
-            Toast.makeText(this, "Меню в разработке", Toast.LENGTH_SHORT).show()
+            showMenuDialog()
         }
 
         fabAddServer.setOnClickListener {
@@ -483,5 +483,69 @@ class MainActivity : AppCompatActivity() {
         if (vpnManager.getStatus() == VpnStatus.CONNECTED) {
             vpnManager.disconnect()
         }
+    }
+
+    private fun showMenuDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_menu, null)
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_NoActionBar)
+            .setView(dialogView)
+            .create()
+
+        dialogView.findViewById<View>(R.id.btnBackup).setOnClickListener {
+            showBackupDialog()
+            dialog.dismiss()
+        }
+
+        dialogView.findViewById<View>(R.id.btnAutoConnect).setOnClickListener {
+            showAutoConnectDialog()
+            dialog.dismiss()
+        }
+
+        dialogView.findViewById<View>(R.id.btnWidget).setOnClickListener {
+            Toast.makeText(this, "Долгое нажатие на рабочий стол → Виджеты → STOP VPN", Toast.LENGTH_LONG).show()
+            dialog.dismiss()
+        }
+
+        dialogView.findViewById<View>(R.id.btnAbout).setOnClickListener {
+            Toast.makeText(this, "STOP VPN v4.0.0
+AmneziaWG + Kotlin", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+
+        dialog.window?.setBackgroundDrawableResource(android.R.color.black)
+        dialog.show()
+    }
+
+    private fun showBackupDialog() {
+        val backupManager = ServerBackupManager(this)
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Резервное копирование")
+            .setMessage("Экспорт или импорт серверов?")
+            .setPositiveButton("Экспорт") { _, _ ->
+                backupManager.shareBackup()
+                Toast.makeText(this, "Конфиги экспортированы", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Импорт") { _, _ ->
+                // TODO: открыть file picker
+                Toast.makeText(this, "Импорт: выберите .json файл", Toast.LENGTH_SHORT).show()
+            }
+            .setNeutralButton("Отмена", null)
+            .show()
+    }
+
+    private fun showAutoConnectDialog() {
+        val storage = AutoConnectStorage(this)
+        val enabled = storage.isEnabled()
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Автоподключение")
+            .setMessage("VPN будет включаться автоматически при открытии выбранных приложений.
+
+Статус: ${if (enabled) "ВКЛ" else "ВЫКЛ"}")
+            .setPositiveButton(if (enabled) "Выключить" else "Включить") { _, _ ->
+                storage.setEnabled(!enabled)
+                Toast.makeText(this, "Автоподключение: ${if (!enabled) "ВКЛ" else "ВЫКЛ"}", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Отмена", null)
+            .show()
     }
 }
