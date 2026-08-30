@@ -18,9 +18,12 @@
             android:layout_height="wrap_content"
             android:text="STOP VPN"
             android:textSize="28sp"
-            android:textStyle="normal"
-            android:fontFamily="sans-serif"
+            android:textStyle="bold"
             android:textColor="@android:color/white"
+            android:shadowColor="#CC0000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="3"
             android:layout_marginTop="24dp" />
 
         <ImageView
