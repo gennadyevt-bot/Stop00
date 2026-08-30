@@ -538,9 +538,7 @@ class MainActivity : AppCompatActivity() {
         val enabled = storage.isEnabled()
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle("Автоподключение")
-            .setMessage("VPN будет включаться автоматически при открытии выбранных приложений.
-
-Статус: ${if (enabled) "ВКЛ" else "ВЫКЛ"}")
+            .setMessage("VPN будет включаться автоматически при открытии выбранных приложений.\n\nСтатус: ${if (enabled) "ВКЛ" else "ВЫКЛ"}")
             .setPositiveButton(if (enabled) "Выключить" else "Включить") { _, _ ->
                 storage.setEnabled(!enabled)
                 Toast.makeText(this, "Автоподключение: ${if (!enabled) "ВКЛ" else "ВЫКЛ"}", Toast.LENGTH_SHORT).show()
