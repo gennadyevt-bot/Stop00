@@ -24,22 +24,48 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
     }
+
     kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs += listOf("-Xskip-metadata-version-check")
+        jvmTarget = "17"
+        freeCompilerArgs += listOf(
+            "-Xskip-metadata-version-check",
+            "-Xno-metadata-version-check"
+        )
     }
+
     buildFeatures {
         viewBinding = true
+    }
+
+    packaging {
+        resources {
+            pickFirsts += listOf(
+                "META-INF/kotlin-stdlib-jdk7.kotlin_module",
+                "META-INF/kotlin-stdlib-jdk8.kotlin_module",
+                "META-INF/kotlin-stdlib.kotlin_module"
+            )
+            excludes += listOf(
+                "META-INF/DUMMY.SF",
+                "META-INF/*.DSA",
+                "META-INF/*.RSA",
+                "META-INF/*.SF"
+            )
+        }
     }
 }
 
 configurations.all {
     resolutionStrategy {
+        force("org.jetbrains.kotlin:kotlin-stdlib:2.0.20")
+        force("org.jetbrains.kotlin:kotlin-stdlib-common:2.0.20")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.20")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.20")
         force("androidx.core:core-ktx:1.12.0")
         force("androidx.core:core:1.12.0")
         force("androidx.appcompat:appcompat:1.6.1")
