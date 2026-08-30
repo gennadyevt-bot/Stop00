@@ -28,7 +28,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -62,10 +61,10 @@ android {
 
 configurations.all {
     resolutionStrategy {
-        force("org.jetbrains.kotlin:kotlin-stdlib:2.0.20")
-        force("org.jetbrains.kotlin:kotlin-stdlib-common:2.0.20")
-        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.20")
-        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.20")
+        force("org.jetbrains.kotlin:kotlin-stdlib:2.0.21")
+        force("org.jetbrains.kotlin:kotlin-stdlib-common:2.0.21")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.21")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.21")
         force("androidx.core:core-ktx:1.12.0")
         force("androidx.core:core:1.12.0")
         force("androidx.appcompat:appcompat:1.6.1")
@@ -82,8 +81,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("com.zaneschepke:amneziawg-android:2.3.7")
-
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
 
 tasks.whenTaskAdded {
