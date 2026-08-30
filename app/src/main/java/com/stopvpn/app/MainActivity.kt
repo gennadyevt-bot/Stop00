@@ -512,7 +512,14 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
         }
 
-        dialog.window?.setBackgroundDrawableResource(android.R.color.black)
+        dialog.setOnShowListener {
+            val window = dialog.window
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+            window?.setGravity(android.view.Gravity.START)
+            val width = (resources.displayMetrics.widthPixels * 0.78).toInt()
+            window?.setLayout(width, android.view.WindowManager.LayoutParams.MATCH_PARENT)
+            window?.attributes?.windowAnimations = android.R.style.Animation_Activity
+        }
         dialog.show()
     }
 
