@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -18,11 +19,11 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
-
     - name: Build with Gradle
-      run: ./gradlew assembleDebug
+      uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: '8.2'
+        arguments: assembleDebug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
