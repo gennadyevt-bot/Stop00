@@ -19,15 +19,20 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Install Gradle 8.10.2
+    - name: Download and install Gradle 8.10.2
       run: |
         wget -q https://services.gradle.org/distributions/gradle-8.10.2-bin.zip -O /tmp/gradle.zip
         sudo unzip -q /tmp/gradle.zip -d /opt/
-        sudo ln -sf /opt/gradle-8.10.2/bin/gradle /usr/local/bin/gradle
-        gradle --version
+        /opt/gradle-8.10.2/bin/gradle --version
+
+    - name: Generate Gradle Wrapper
+      run: |
+        /opt/gradle-8.10.2/bin/gradle wrapper --gradle-version 8.10.2
+        chmod +x gradlew
+        ls -la gradlew
 
     - name: Assemble Debug
-      run: gradle assembleDebug
+      run: ./gradlew assembleDebug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
