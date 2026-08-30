@@ -36,7 +36,7 @@ class VpnManager(private val context: Context) {
     init {
         scope.launch(Dispatchers.IO) {
             try {
-                backend = GoBackend(context)
+                backend = GoBackend(context, null)
                 futureBackend.complete(backend!!)
                 Log.i(TAG, "AmneziaWG backend initialized")
             } catch (e: Exception) {
