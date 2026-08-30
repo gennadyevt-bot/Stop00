@@ -24,9 +24,24 @@ class ServerBackupManager(private val context: Context) {
                     put("id", s.id)
                     put("name", s.name)
                     put("country", s.country)
-                    put("city", s.city)
                     put("flagEmoji", s.flagEmoji)
-                    put("config", s.config)
+                    put("interfaceAddress", s.interfaceAddress)
+                    put("interfaceDns", s.interfaceDns)
+                    put("interfacePrivateKey", s.interfacePrivateKey)
+                    put("peerPublicKey", s.peerPublicKey)
+                    put("peerPresharedKey", s.peerPresharedKey)
+                    put("peerAllowedIPs", s.peerAllowedIPs)
+                    put("peerEndpoint", s.peerEndpoint)
+                    put("peerPersistentKeepalive", s.peerPersistentKeepalive)
+                    put("jc", s.jc)
+                    put("jmin", s.jmin)
+                    put("jmax", s.jmax)
+                    put("s1", s.s1)
+                    put("s2", s.s2)
+                    put("h1", s.h1)
+                    put("h2", s.h2)
+                    put("h3", s.h3)
+                    put("h4", s.h4)
                 })
             }
             put("servers", array)
@@ -54,9 +69,24 @@ class ServerBackupManager(private val context: Context) {
                     id = obj.getString("id"),
                     name = obj.getString("name"),
                     country = obj.getString("country"),
-                    city = obj.getString("city"),
                     flagEmoji = obj.getString("flagEmoji"),
-                    config = obj.getString("config")
+                    interfaceAddress = obj.getString("interfaceAddress"),
+                    interfaceDns = obj.getString("interfaceDns"),
+                    interfacePrivateKey = obj.getString("interfacePrivateKey"),
+                    peerPublicKey = obj.getString("peerPublicKey"),
+                    peerPresharedKey = obj.optString("peerPresharedKey", ""),
+                    peerAllowedIPs = obj.optString("peerAllowedIPs", "0.0.0.0/0"),
+                    peerEndpoint = obj.getString("peerEndpoint"),
+                    peerPersistentKeepalive = obj.optString("peerPersistentKeepalive", "25"),
+                    jc = obj.optString("jc", "5"),
+                    jmin = obj.optString("jmin", "50"),
+                    jmax = obj.optString("jmax", "1000"),
+                    s1 = obj.optString("s1", "50"),
+                    s2 = obj.optString("s2", "100"),
+                    h1 = obj.optString("h1", "1"),
+                    h2 = obj.optString("h2", "2"),
+                    h3 = obj.optString("h3", "3"),
+                    h4 = obj.optString("h4", "4")
                 ))
             }
             storage.saveServers(servers)
