@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var ivLogo: ImageView
     private lateinit var rvServers: RecyclerView
     private lateinit var tvCurrentServer: TextView
+    private lateinit var tvTrafficDown: TextView
+    private lateinit var tvTrafficUp: TextView
     private lateinit var fabAddServer: FloatingActionButton
 
     private var selectedServer: ServerInfo? = null
@@ -61,6 +63,8 @@ class MainActivity : AppCompatActivity() {
         ivLogo = findViewById(R.id.ivLogo)
         rvServers = findViewById(R.id.rvServers)
         tvCurrentServer = findViewById(R.id.tvCurrentServer)
+        tvTrafficDown = findViewById(R.id.tvTrafficDown)
+        tvTrafficUp = findViewById(R.id.tvTrafficUp)
         fabAddServer = findViewById(R.id.fabAddServer)
 
         requestNotificationPermission()
@@ -395,25 +399,75 @@ class MainActivity : AppCompatActivity() {
     private fun updateUiState(status: VpnStatus) {
         when (status) {
             VpnStatus.CONNECTED -> {
+                ivLogo.setImageResource(R.drawable.ic_logo_big_green)
                 tvStatus.text = "VPN активен"
                 tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark))
+                tvTrafficDown.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark))
+                tvTrafficUp.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark))
+                startTrafficMonitor()
             }
             VpnStatus.CONNECTING -> {
+                ivLogo.setImageResource(R.drawable.ic_logo_big)
                 tvStatus.text = "Подключение..."
                 tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark))
+                tvTrafficDown.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark))
+                tvTrafficUp.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark))
             }
             VpnStatus.SWITCHING -> {
+                ivLogo.setImageResource(R.drawable.ic_logo_big)
                 tvStatus.text = "Смена сервера..."
                 tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark))
+                tvTrafficDown.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark))
+                tvTrafficUp.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark))
             }
             VpnStatus.DISCONNECTING -> {
+                ivLogo.setImageResource(R.drawable.ic_logo_big)
                 tvStatus.text = "Отключение..."
                 tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark))
+                tvTrafficDown.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark))
+                tvTrafficUp.setTextColor(ContextCompat.getColor(this, android.R.color.holo_orange_dark))
             }
             else -> {
+                ivLogo.setImageResource(R.drawable.ic_logo_big)
                 tvStatus.text = "VPN отключен"
                 tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray))
+                tvTrafficDown.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray))
+                tvTrafficUp.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray))
+                stopTrafficMonitor()
             }
+        }
+    }
+
+    private var trafficHandler: android.os.Handler? = null
+    private var trafficRunnable: Runnable? = null
+
+    private fun startTrafficMonitor() {
+        trafficHandler = android.os.Handler(android.os.Looper.getMainLooper())
+        trafficRunnable = object : Runnable {
+            override fun run() {
+                val stats = vpnManager.getTrafficStats()
+                tvTrafficDown.text = "↓ ${formatBytes(stats.rxBytes)}/s"
+                tvTrafficUp.text = "↑ ${formatBytes(stats.txBytes)}/s"
+                trafficHandler?.postDelayed(this, 1000)
+            }
+        }
+        trafficHandler?.post(trafficRunnable!!)
+    }
+
+    private fun stopTrafficMonitor() {
+        trafficRunnable?.let { trafficHandler?.removeCallbacks(it) }
+        trafficHandler = null
+        trafficRunnable = null
+        tvTrafficDown.text = "↓ 0 B/s"
+        tvTrafficUp.text = "↑ 0 B/s"
+    }
+
+    private fun formatBytes(bytes: Long): String {
+        return when {
+            bytes >= 1024 * 1024 * 1024 -> "%.2f GB".format(bytes / (1024.0 * 1024.0 * 1024.0))
+            bytes >= 1024 * 1024 -> "%.2f MB".format(bytes / (1024.0 * 1024.0))
+            bytes >= 1024 -> "%.2f KB".format(bytes / 1024.0)
+            else -> "$bytes B"
         }
     }
 
