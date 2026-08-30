@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.stopvpn.app"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.stopvpn.app"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 2
         versionName = "4.0.0"
     }
@@ -31,6 +31,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += listOf("-Xskip-metadata-version-check")
     }
     buildFeatures {
         viewBinding = true
@@ -39,6 +40,10 @@ android {
 
 configurations.all {
     resolutionStrategy {
+        force("org.jetbrains.kotlin:kotlin-stdlib:2.0.0")
+        force("org.jetbrains.kotlin:kotlin-stdlib-common:2.0.0")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.0")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.0")
         force("androidx.core:core-ktx:1.12.0")
         force("androidx.core:core:1.12.0")
         force("androidx.appcompat:appcompat:1.6.1")
@@ -56,10 +61,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("com.zaneschepke:amneziawg-android:2.3.7")
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
 
-// Disable AAR metadata check that forces compileSdk 36
 tasks.whenTaskAdded {
     if (name.contains("checkDebugAarMetadata") || name.contains("checkReleaseAarMetadata")) {
         enabled = false
