@@ -8,10 +8,10 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
-import com.zaneschepke.amneziawg.android.Backend
-import com.zaneschepke.amneziawg.android.GoBackend
-import com.zaneschepke.amneziawg.android.Tunnel
-import com.zaneschepke.amneziawg.android.Config
+import org.amnezia.awg.backend.Backend
+import org.amnezia.awg.backend.GoBackend
+import org.amnezia.awg.backend.Tunnel
+import org.amnezia.awg.config.Config
 import kotlinx.coroutines.*
 import java.io.ByteArrayInputStream
 import java.net.InetAddress
