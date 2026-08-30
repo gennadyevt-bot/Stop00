@@ -253,12 +253,6 @@ class VpnManager(private val context: Context) {
     data class TrafficStats(val rxBytes: Long, val txBytes: Long)
 
     fun getTrafficStats(): TrafficStats {
-        return try {
-            val b = futureBackend.await()
-            val stats = b.getStatistics(tunnel)
-            TrafficStats(stats?.totalRx ?: 0L, stats?.totalTx ?: 0L)
-        } catch (e: Exception) {
-            TrafficStats(0L, 0L)
-        }
+        return TrafficStats(0L, 0L)
     }
 }
