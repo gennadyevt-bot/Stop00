@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvCurrentServer: TextView
     private lateinit var tvTrafficDown: TextView
     private lateinit var tvTrafficUp: TextView
+    private lateinit var ivMenu: ImageView
     private lateinit var fabAddServer: FloatingActionButton
 
     private var selectedServer: ServerInfo? = null
@@ -65,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         tvCurrentServer = findViewById(R.id.tvCurrentServer)
         tvTrafficDown = findViewById(R.id.tvTrafficDown)
         tvTrafficUp = findViewById(R.id.tvTrafficUp)
+        ivMenu = findViewById(R.id.ivMenu)
         fabAddServer = findViewById(R.id.fabAddServer)
 
         requestNotificationPermission()
@@ -81,6 +83,10 @@ class MainActivity : AppCompatActivity() {
                         ?: Toast.makeText(this, "Сначала выберите сервер из списка", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+
+        ivMenu.setOnClickListener {
+            Toast.makeText(this, "Меню в разработке", Toast.LENGTH_SHORT).show()
         }
 
         fabAddServer.setOnClickListener {
