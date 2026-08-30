@@ -40,10 +40,6 @@ android {
 
 configurations.all {
     resolutionStrategy {
-        force("org.jetbrains.kotlin:kotlin-stdlib:2.0.0")
-        force("org.jetbrains.kotlin:kotlin-stdlib-common:2.0.0")
-        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.0")
-        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.0")
         force("androidx.core:core-ktx:1.12.0")
         force("androidx.core:core:1.12.0")
         force("androidx.appcompat:appcompat:1.6.1")
