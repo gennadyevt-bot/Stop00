@@ -3,29 +3,37 @@ package com.stopvpn.app
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.provider.DocumentsContract
 import androidx.core.content.FileProvider
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.File
 import java.io.InputStream
 
 class ServerBackupManager(private val context: Context) {
 
-    private val json = Json { prettyPrint = true; ignoreUnknownKeys = true }
     private val storage = ServerStorage(context)
 
     fun exportToFile(): Uri? {
         val servers = storage.loadServers()
-        val backup = BackupData(
-            version = 1,
-            servers = servers,
-            exportDate = System.currentTimeMillis()
-        )
-        val jsonString = json.encodeToString(backup)
+        val json = JSONObject().apply {
+            put("version", 1)
+            put("exportDate", System.currentTimeMillis())
+            val array = JSONArray()
+            for (s in servers) {
+                array.put(JSONObject().apply {
+                    put("id", s.id)
+                    put("name", s.name)
+                    put("country", s.country)
+                    put("city", s.city)
+                    put("flagEmoji", s.flagEmoji)
+                    put("config", s.config)
+                })
+            }
+            put("servers", array)
+        }
 
         val file = File(context.cacheDir, "stop_vpn_backup.json")
-        file.writeText(jsonString)
+        file.writeText(json.toString(2))
 
         return FileProvider.getUriForFile(
             context,
@@ -37,8 +45,21 @@ class ServerBackupManager(private val context: Context) {
     fun importFromStream(inputStream: InputStream): Boolean {
         return try {
             val jsonString = inputStream.bufferedReader().use { it.readText() }
-            val backup = json.decodeFromString<BackupData>(jsonString)
-            storage.saveServers(backup.servers)
+            val json = JSONObject(jsonString)
+            val array = json.getJSONArray("servers")
+            val servers = mutableListOf<ServerInfo>()
+            for (i in 0 until array.length()) {
+                val obj = array.getJSONObject(i)
+                servers.add(ServerInfo(
+                    id = obj.getString("id"),
+                    name = obj.getString("name"),
+                    country = obj.getString("country"),
+                    city = obj.getString("city"),
+                    flagEmoji = obj.getString("flagEmoji"),
+                    config = obj.getString("config")
+                ))
+            }
+            storage.saveServers(servers)
             true
         } catch (e: Exception) {
             false
@@ -56,10 +77,3 @@ class ServerBackupManager(private val context: Context) {
         context.startActivity(Intent.createChooser(intent, "Поделиться конфигами"))
     }
 }
-
-@kotlinx.serialization.Serializable
-data class BackupData(
-    val version: Int,
-    val servers: List<ServerInfo>,
-    val exportDate: Long
-)
