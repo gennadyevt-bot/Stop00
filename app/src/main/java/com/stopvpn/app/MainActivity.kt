@@ -100,6 +100,27 @@ class MainActivity : AppCompatActivity() {
     private fun getDefaultServers(): List<ServerInfo> {
         return listOf(
             ServerInfo(
+                id = "premiusa-01",
+                name = "VPNJantit Premium USA",
+                country = "США, Премиум",
+                flagEmoji = "🇺🇸",
+                interfaceAddress = "192.168.6.99/32",
+                interfaceDns = "1.1.1.1, 8.8.8.8",
+                interfacePrivateKey = "aApi17qSZVvAg05MSr6+4AHudvMZJ2jKOEu/HO3e7mk=",
+                peerPublicKey = "5EhTY/DjbqjL4M7v3KaMOl84FVt/ZtOnAKIGpQy4GSY=",
+                peerEndpoint = "premiusa2.vpnjantit.com:1024",
+                peerAllowedIPs = "0.0.0.0/0",
+                jc = "",
+                jmin = "",
+                jmax = "",
+                s1 = "",
+                s2 = "",
+                h1 = "",
+                h2 = "",
+                h3 = "",
+                h4 = ""
+            ),
+            ServerInfo(
                 id = "nl-ams-01",
                 name = "NL-AMS-01",
                 country = "Нидерланды, Амстердам",
