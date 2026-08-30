@@ -210,9 +210,21 @@ class VpnManager(private val context: Context) {
 
     private fun buildConfig(server: ServerInfo): Config {
         val presharedKeyLine = if (server.peerPresharedKey.isNotEmpty()) {
-            "PresharedKey = ${server.peerPresharedKey}"
+            "PresharedKey = ${server.peerPresharedKey}\n"
         } else {
             ""
+        }
+
+        val awgParams = buildString {
+            if (server.jc.isNotEmpty() && server.jc != "0") append("Jc = ${server.jc}\n")
+            if (server.jmin.isNotEmpty() && server.jmin != "0") append("Jmin = ${server.jmin}\n")
+            if (server.jmax.isNotEmpty() && server.jmax != "0") append("Jmax = ${server.jmax}\n")
+            if (server.s1.isNotEmpty() && server.s1 != "0") append("S1 = ${server.s1}\n")
+            if (server.s2.isNotEmpty() && server.s2 != "0") append("S2 = ${server.s2}\n")
+            if (server.h1.isNotEmpty() && server.h1 != "0") append("H1 = ${server.h1}\n")
+            if (server.h2.isNotEmpty() && server.h2 != "0") append("H2 = ${server.h2}\n")
+            if (server.h3.isNotEmpty() && server.h3 != "0") append("H3 = ${server.h3}\n")
+            if (server.h4.isNotEmpty() && server.h4 != "0") append("H4 = ${server.h4}\n")
         }
 
         val allowedIPs = if (server.peerAllowedIPs.contains("::/0")) {
@@ -227,17 +239,7 @@ class VpnManager(private val context: Context) {
             Address = ${server.interfaceAddress}
             DNS = ${server.interfaceDns}
             PrivateKey = ${server.interfacePrivateKey}
-            Jc = ${server.jc}
-            Jmin = ${server.jmin}
-            Jmax = ${server.jmax}
-            S1 = ${server.s1}
-            S2 = ${server.s2}
-            H1 = ${server.h1}
-            H2 = ${server.h2}
-            H3 = ${server.h3}
-            H4 = ${server.h4}
-
-            [Peer]
+            ${awgParams}[Peer]
             PublicKey = ${server.peerPublicKey}
             $presharedKeyLine
             AllowedIPs = $allowedIPs
