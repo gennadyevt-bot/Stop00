@@ -37,6 +37,15 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("androidx.core:core-ktx:1.12.0")
+        force("androidx.core:core:1.12.0")
+        force("androidx.appcompat:appcompat:1.6.1")
+        force("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    }
+}
+
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
