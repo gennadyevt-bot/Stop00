@@ -28,7 +28,6 @@ class StopVpnWidget : AppWidgetProvider() {
             }
             views.setImageViewResource(R.id.ivWidgetLogo, logoRes)
 
-            // PendingIntent для нажатия
             val intent = Intent(context, StopVpnWidget::class.java).apply {
                 action = ACTION_TOGGLE_VPN
             }
@@ -43,36 +42,24 @@ class StopVpnWidget : AppWidgetProvider() {
     }
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        val status = VpnManager.globalStatus
-        updateWidget(context, status)
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        context.startActivity(intent)
     }
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
 
         if (intent.action == ACTION_TOGGLE_VPN) {
-            val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-            scope.launch {
-                val vpnManager = VpnManager(context)
-                when (vpnManager.getStatus()) {
-                    VpnStatus.CONNECTED, VpnStatus.CONNECTING -> {
-                        vpnManager.disconnect()
-                    }
-                    else -> {
-                        val storage = ServerStorage(context)
-                        val servers = storage.loadServers()
-                        val server = servers.firstOrNull { it.id == "premiusa-01" }
-                            ?: servers.firstOrNull()
-                        server?.let {
-                            vpnManager.connect(it)
-                        }
-                    }
-                }
-                delay(500)
-                updateWidget(context, vpnManager.getStatus())
+            val mainIntent = Intent(context, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                putExtra("toggle_vpn", true)
             }
+            context.startActivity(mainIntent)
         } else if (intent.action == ACTION_UPDATE_WIDGET) {
-            val status = intent.getSerializableExtra("status") as? VpnStatus ?: VpnStatus.DISCONNECTED
+            val statusStr = intent.getStringExtra("status") ?: "DISCONNECTED"
+            val status = VpnStatus.valueOf(statusStr)
             updateWidget(context, status)
         }
     }
