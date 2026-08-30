@@ -113,4 +113,16 @@
         app:backgroundTint="#CC0000"
         android:contentDescription="Добавить сервер" />
 
+    <ImageView
+        android:id="@+id/ivMenu"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="start|top"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_menu"
+        android:clickable="true"
+        android:focusable="true"
+        android:contentDescription="Меню" />
+
 </FrameLayout>
