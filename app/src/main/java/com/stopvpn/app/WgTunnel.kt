@@ -16,7 +16,7 @@ class WgTunnel(
         onStateChanged?.invoke(newState)
     }
 
-    override fun isIpv4ResolutionPreferred(): Boolean = true
+    override fun isMetered(): Boolean = false
 
     fun getState(): Tunnel.State = currentState
 }
