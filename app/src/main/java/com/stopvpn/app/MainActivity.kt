@@ -540,8 +540,10 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun showAutoConnectDialog() {
-        val storage = AutoConnectStorage(this)
+        private fun showAutoConnectDialog() {
+        val prefs = getSharedPreferences("auto_connect", MODE_PRIVATE)
+        val savedPackages = prefs.getStringSet("packages", emptySet())?.toMutableSet() ?: mutableSetOf()
+
         val dialogView = layoutInflater.inflate(R.layout.dialog_app_list, null)
         val dialog = androidx.appcompat.app.AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_NoActionBar)
             .setView(dialogView)
@@ -555,16 +557,16 @@ class MainActivity : AppCompatActivity() {
             .filter { (pm.getLaunchIntentForPackage(it.packageName) != null) && !it.packageName.contains("com.stopvpn") }
             .sortedBy { pm.getApplicationLabel(it).toString() }
 
-        val savedPackages = storage.getAppPackages().toMutableSet()
-        val adapter = AppListAdapter(this, installedApps, savedPackages) { pkg, checked ->
-            if (checked) savedPackages.add(pkg) else savedPackages.remove(pkg)
+        val selectedPackages = savedPackages.toMutableSet()
+        val adapter = AppListAdapter(this, installedApps, selectedPackages) { pkg, checked ->
+            if (checked) selectedPackages.add(pkg) else selectedPackages.remove(pkg)
         }
         recyclerView.adapter = adapter
 
         dialogView.findViewById<android.widget.Button>(R.id.btnSave).setOnClickListener {
-            storage.setAppPackages(savedPackages)
-            storage.setEnabled(savedPackages.isNotEmpty())
-            Toast.makeText(this, "Сохранено: ${savedPackages.size} прилож.", Toast.LENGTH_SHORT).show()
+            prefs.edit().putStringSet("packages", selectedPackages).apply()
+            prefs.edit().putBoolean("enabled", selectedPackages.isNotEmpty()).apply()
+            Toast.makeText(this, "Сохранено: " + selectedPackages.size + " прилож.", Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
 
@@ -575,6 +577,8 @@ class MainActivity : AppCompatActivity() {
         dialog.window?.setBackgroundDrawableResource(android.R.color.black)
         dialog.show()
     }
+
+
     inner class AppListAdapter(
         private val context: android.content.Context,
         private val apps: List<android.content.pm.ApplicationInfo>,
