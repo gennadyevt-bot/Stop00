@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#FF9800" />
+            <size android:width="32dp" android:height="32dp" />
+        </shape>
+    </item>
+    <item android:gravity="center">
+        <vector android:width="18dp" android:height="18dp" android:viewportWidth="24" android:viewportHeight="24">
+            <path android:fillColor="#FFFFFF" android:pathData="M13,2.05v2.02c1.46,0.18,2.82,0.76,3.9,1.62l1.42-1.42C16.88,2.99,15.01,2.17,13,2.05z M19.91,5.5l-1.42,1.42c0.86,1.08,1.44,2.44,1.62,3.9h2.02C21.83,8.01,21.01,6.14,19.91,5.5z M18,12c0-3.31-2.69-6-6-6s-6,2.69-6,6s2.69,6,6,6S18,15.31,18,12z M13,17.91v2.02c2.01-0.12,3.88-0.94,5.32-2.07l-1.42-1.42C15.82,17.15,14.46,17.73,13,17.91z M5.5,19.91c1.14,1.1,2.99,1.92,5.07,2.04v-2.02c-1.46-0.18-2.82-0.76-3.9-1.62L5.5,19.91z M4.09,13H2.07c0.12,2.01,0.94,3.88,2.07,5.32l1.42-1.42C4.7,15.82,4.12,14.46,4.09,13z M5.5,4.09L4.08,5.5C4.7,6.14,5.52,7.99,5.64,10.07h2.02C7.48,8.01,6.66,6.14,5.5,4.09z"/>
+        </vector>
+    </item>
+</layer-list>
