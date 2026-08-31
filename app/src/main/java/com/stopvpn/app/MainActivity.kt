@@ -87,7 +87,30 @@ class MainActivity : AppCompatActivity() {
         }
 
         ivMenu.setOnClickListener {
-            showMenuDialog()
+            drawerLayout.openDrawer(android.view.Gravity.START)
+        }
+
+        val drawerLayout = findViewById<androidx.drawerlayout.widget.DrawerLayout>(R.id.drawerLayout)
+        val btnBackup = findViewById<android.view.View>(R.id.btnBackup)
+        val btnAutoConnect = findViewById<android.view.View>(R.id.btnAutoConnect)
+        val btnWidget = findViewById<android.view.View>(R.id.btnWidget)
+        val btnAbout = findViewById<android.view.View>(R.id.btnAbout)
+
+        btnBackup.setOnClickListener {
+            drawerLayout.closeDrawer(android.view.Gravity.START)
+            showBackupDialog()
+        }
+        btnAutoConnect.setOnClickListener {
+            drawerLayout.closeDrawer(android.view.Gravity.START)
+            showAutoConnectDialog()
+        }
+        btnWidget.setOnClickListener {
+            drawerLayout.closeDrawer(android.view.Gravity.START)
+            Toast.makeText(this, "Долгое нажатие на рабочий стол → Виджеты → STOP VPN", Toast.LENGTH_LONG).show()
+        }
+        btnAbout.setOnClickListener {
+            drawerLayout.closeDrawer(android.view.Gravity.START)
+            Toast.makeText(this, "STOP VPN v4.0.0 | AmneziaWG + Kotlin", Toast.LENGTH_SHORT).show()
         }
 
         fabAddServer.setOnClickListener {
@@ -486,42 +509,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showMenuDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_menu, null)
-        val dialog = androidx.appcompat.app.AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_NoActionBar)
-            .setView(dialogView)
-            .create()
 
-        dialogView.findViewById<View>(R.id.btnBackup).setOnClickListener {
-            showBackupDialog()
-            dialog.dismiss()
-        }
-
-        dialogView.findViewById<View>(R.id.btnAutoConnect).setOnClickListener {
-            showAutoConnectDialog()
-            dialog.dismiss()
-        }
-
-        dialogView.findViewById<View>(R.id.btnWidget).setOnClickListener {
-            Toast.makeText(this, "Долгое нажатие на рабочий стол → Виджеты → STOP VPN", Toast.LENGTH_LONG).show()
-            dialog.dismiss()
-        }
-
-        dialogView.findViewById<View>(R.id.btnAbout).setOnClickListener {
-            Toast.makeText(this, "STOP VPN v4.0.0 | AmneziaWG + Kotlin", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
-        }
-
-        dialog.setOnShowListener {
-            val window = dialog.window
-            window?.setBackgroundDrawableResource(android.R.color.transparent)
-            window?.setGravity(android.view.Gravity.START)
-            val width = (resources.displayMetrics.widthPixels * 0.78).toInt()
-            window?.setLayout(width, android.view.WindowManager.LayoutParams.MATCH_PARENT)
-            window?.decorView?.startAnimation(android.view.animation.AnimationUtils.loadAnimation(this, R.anim.slide_in_left))
-        }
-        dialog.show()
-    }
 
     private fun showBackupDialog() {
         val backupManager = ServerBackupManager(this)
