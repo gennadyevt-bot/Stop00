@@ -609,7 +609,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        override fun getItemCount() = apps.size
+        override fun getItemCount(): Int = apps.size
     }
 
 }
