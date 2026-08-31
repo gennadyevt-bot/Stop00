@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#111111"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Выберите приложения"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="VPN будет автоматически включаться при открытии выбранных приложений"
+        android:textSize="13sp"
+        android:textColor="#AAAAAA"
+        android:layout_marginBottom="8dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerApps"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="#1a1a1a"
+        android:padding="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginTop="12dp">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Отмена"
+            android:textColor="#AAAAAA"
+            android:background="@android:color/transparent" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Сохранить"
+            android:textColor="#4CAF50"
+            android:background="@android:color/transparent" />
+    </LinearLayout>
+
+</LinearLayout>
