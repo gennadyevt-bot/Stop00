@@ -28,7 +28,7 @@
     <LinearLayout
         android:id="@+id/btnBackup"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="52dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:paddingStart="16dp"
@@ -37,10 +37,16 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground">
 
+        <View
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/ic_menu_backup"
+            android:layout_marginEnd="16dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="💾  Резервное копирование"
+            android:text="Резервное копирование"
             android:textSize="16sp"
             android:textColor="@android:color/white"
             android:maxLines="1"
@@ -55,7 +61,7 @@
     <LinearLayout
         android:id="@+id/btnAutoConnect"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="52dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:paddingStart="16dp"
@@ -64,10 +70,16 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground">
 
+        <View
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/ic_menu_auto"
+            android:layout_marginEnd="16dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⚡  Автоподключение"
+            android:text="Автоподключение"
             android:textSize="16sp"
             android:textColor="@android:color/white"
             android:maxLines="1"
@@ -82,7 +94,7 @@
     <LinearLayout
         android:id="@+id/btnWidget"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="52dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:paddingStart="16dp"
@@ -91,10 +103,16 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground">
 
+        <View
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/ic_menu_widget"
+            android:layout_marginEnd="16dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🖼️  Виджет (добавить на раб. стол)"
+            android:text="Виджет"
             android:textSize="16sp"
             android:textColor="@android:color/white"
             android:maxLines="1"
@@ -109,7 +127,7 @@
     <LinearLayout
         android:id="@+id/btnAbout"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="52dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:paddingStart="16dp"
@@ -118,10 +136,16 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground">
 
+        <View
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/ic_menu_about"
+            android:layout_marginEnd="16dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ℹ️  О приложении"
+            android:text="О приложении"
             android:textSize="16sp"
             android:textColor="@android:color/white"
             android:maxLines="1"
