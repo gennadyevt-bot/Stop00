@@ -86,11 +86,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        val drawerLayout = findViewById<androidx.drawerlayout.widget.DrawerLayout>(R.id.drawerLayout)
+
         ivMenu.setOnClickListener {
             drawerLayout.openDrawer(android.view.Gravity.START)
         }
-
-        val drawerLayout = findViewById<androidx.drawerlayout.widget.DrawerLayout>(R.id.drawerLayout)
         val btnBackup = findViewById<android.view.View>(R.id.btnBackup)
         val btnAutoConnect = findViewById<android.view.View>(R.id.btnAutoConnect)
         val btnWidget = findViewById<android.view.View>(R.id.btnWidget)
