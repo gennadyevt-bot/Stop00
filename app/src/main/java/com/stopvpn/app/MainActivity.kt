@@ -518,7 +518,7 @@ class MainActivity : AppCompatActivity() {
             window?.setGravity(android.view.Gravity.START)
             val width = (resources.displayMetrics.widthPixels * 0.78).toInt()
             window?.setLayout(width, android.view.WindowManager.LayoutParams.MATCH_PARENT)
-            window?.attributes?.windowAnimations = android.R.style.Animation_Activity
+            window?.decorView?.startAnimation(android.view.animation.AnimationUtils.loadAnimation(this, R.anim.slide_in_left))
         }
         dialog.show()
     }
@@ -542,15 +542,74 @@ class MainActivity : AppCompatActivity() {
 
     private fun showAutoConnectDialog() {
         val storage = AutoConnectStorage(this)
-        val enabled = storage.isEnabled()
-        androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("Автоподключение")
-            .setMessage("VPN будет включаться автоматически при открытии выбранных приложений.\n\nСтатус: ${if (enabled) "ВКЛ" else "ВЫКЛ"}")
-            .setPositiveButton(if (enabled) "Выключить" else "Включить") { _, _ ->
-                storage.setEnabled(!enabled)
-                Toast.makeText(this, "Автоподключение: ${if (!enabled) "ВКЛ" else "ВЫКЛ"}", Toast.LENGTH_SHORT).show()
-            }
-            .setNegativeButton("Отмена", null)
-            .show()
+        val dialogView = layoutInflater.inflate(R.layout.dialog_app_list, null)
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_NoActionBar)
+            .setView(dialogView)
+            .create()
+
+        val recyclerView = dialogView.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerApps)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+
+        val pm = packageManager
+        val installedApps = pm.getInstalledApplications(0)
+            .filter { (pm.getLaunchIntentForPackage(it.packageName) != null) && !it.packageName.contains("com.stopvpn") }
+            .sortedBy { pm.getApplicationLabel(it).toString() }
+
+        val savedPackages = storage.getAppPackages().toMutableSet()
+        val adapter = AppListAdapter(this, installedApps, savedPackages) { pkg, checked ->
+            if (checked) savedPackages.add(pkg) else savedPackages.remove(pkg)
+        }
+        recyclerView.adapter = adapter
+
+        dialogView.findViewById<android.widget.Button>(R.id.btnSave).setOnClickListener {
+            storage.setAppPackages(savedPackages)
+            storage.setEnabled(savedPackages.isNotEmpty())
+            Toast.makeText(this, "Сохранено: ${savedPackages.size} прилож.", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+
+        dialogView.findViewById<android.widget.Button>(R.id.btnCancel).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.window?.setBackgroundDrawableResource(android.R.color.black)
+        dialog.show()
     }
+    inner class AppListAdapter(
+        private val context: android.content.Context,
+        private val apps: List<android.content.pm.ApplicationInfo>,
+        private val selectedPackages: MutableSet<String>,
+        private val onCheckedChange: (String, Boolean) -> Unit
+    ) : androidx.recyclerview.widget.RecyclerView.Adapter<AppListAdapter.ViewHolder>() {
+
+        private val pm = context.packageManager
+
+        inner class ViewHolder(view: android.view.View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+            val imgIcon: android.widget.ImageView = view.findViewById(R.id.imgAppIcon)
+            val tvName: android.widget.TextView = view.findViewById(R.id.tvAppName)
+            val checkBox: android.widget.CheckBox = view.findViewById(R.id.checkBox)
+        }
+
+        override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): ViewHolder {
+            val view = android.view.LayoutInflater.from(context).inflate(R.layout.item_app, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val app = apps[position]
+            val label = pm.getApplicationLabel(app).toString()
+            holder.tvName.text = label
+            holder.imgIcon.setImageDrawable(pm.getApplicationIcon(app))
+            holder.checkBox.isChecked = selectedPackages.contains(app.packageName)
+            holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
+                onCheckedChange(app.packageName, isChecked)
+            }
+            holder.itemView.setOnClickListener {
+                holder.checkBox.isChecked = !holder.checkBox.isChecked
+            }
+        }
+
+        override fun getItemCount() = apps.size
+    }
+
 }
